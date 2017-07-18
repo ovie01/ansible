@@ -1,0 +1,7 @@
+---
+# defaults file for stack
+reset_stack: false
+destroy_stack: false
+launch_stack: false
+install_stack: false
+machine_folder: /mnt/raid/cluster

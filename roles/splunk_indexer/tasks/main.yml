@@ -1,0 +1,30 @@
+- name: Create /opt/splunk
+  file:
+    dest: /opt/splunk
+    state: directory
+    mode: 0755
+
+- name: groupadd splunk
+  group:
+    name: splunk
+    state: present
+
+- name: add user
+  user:
+    name: splunk
+    uid: 1001
+    group: splunk
+
+- name: download splunk
+  get_url:
+    url: https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=6.5.2&product=splunk&filename=splunk-6.5.2-67571ef4b87d-Linux-x86_64.tgz&wget=true
+    dest: /opt/splunk
+
+- name: unzip
+  unarchive:
+       src: /opt/splunk/splunk-6.5.2-67571ef4b87d-Linux-x86_64.tgz
+       dest: /opt/splunk/
+       remote_src: True
+
+- name: execute splunk
+  command: chdir=/opt/splunk/splunk/bin ./splunk start --accept-license

@@ -1,0 +1,49 @@
+---
+# tasks file for stack
+# create a directory if it doesn't exist
+- file:
+    path: /opt/stack
+    state: directory
+    mode: 0755
+
+- name: copying over vagrantfile
+  template:
+    src: Vagrantfile.j2
+    dest: "{{machine_folder}}/Vagrantfile"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: install vagrant
+  yum:
+    name: 'https://releases.hashicorp.com/vagrant/1.9.0/vagrant_1.9.0_x86_64.rpm'
+    state: present
+  when: install_stack
+
+- name: install virtualbox
+  yum:
+    name: 'http://download.virtualbox.org/virtualbox/5.1.10/VirtualBox-5.1-5.1.10_112026_el7-1.x86_64.rpm'
+    state: present
+  when: install_stack
+
+- name: Installing gcc make and kernel
+  yum: name="{{item}}" state=latest update_cache=yes
+  with_items:
+  - gcc
+  - make
+  - kernel-devel-3.10.0-327.36.3.el7.x86_64
+  when: install_stack
+
+- name: reset virtualbox nodes
+  shell: "cd {{machine_folder}}; vagrant destroy -f; vagrant up"
+  when: reset_stack
+
+- name: launch virtualbox nodes
+  shell: "cd {{machine_folder}}; vagrant up"
+  when: launch_stack
+
+- name: destroy virtualbox nodes
+  shell: "cd {{machine_folder}}; vagrant destroy -f"
+  when: destroy_stack
+
+# - name:  run /sbin/vboxconfig

@@ -1,0 +1,18 @@
+
+
+- name: create directory
+  file:
+    dest: /opt/terraform
+    state: directory
+    mode: 0755
+
+- name: Download Terraform
+  get_url:
+      url: https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip?_ga=1.240390085.752342965.1490713515
+      dest: /opt/terraform
+
+- name: unpack terraform
+  unarchive:
+    src: /opt/terraform/terraform_0.9.1_linux_amd64.zip
+    dest: /opt/terraform
+    remote_src: True
