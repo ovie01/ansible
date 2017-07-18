@@ -1,0 +1,4 @@
+---
+mongo_version: 3.4
+mongo_bind_ip: 0.0.0.0
+mongo_replica_set_name: "bigdata"

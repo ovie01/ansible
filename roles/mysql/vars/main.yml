@@ -1,0 +1,16 @@
+---
+# This space intentionally left blank.
+# Hostname
+server_hostname: test-bench
+
+# Server root password
+server_root_password: password
+
+# Client root password
+client_root_password: password
+
+# Default user password
+default_user_password: password
+
+# Default mysql password
+mysql_root_password: password

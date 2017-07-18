@@ -1,0 +1,36 @@
+- file:
+    dest: /opt/rabbitmq
+    state: directory
+    mode: 0755
+
+- name: install the fedoraproject EPEL repo
+  yum:
+    name: 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm'
+    state: present
+
+- name: Install erlang
+  yum: name=erlang state=present update_cache=yes
+
+- name: download rabbitmq repo
+
+- name: install rabbitmq repo
+  yum:
+    name: 'https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server-3.6.1-1.noarch.rpm'
+    state: present
+
+- name: install rabbitmq
+  yum: name=rabbitmq-server-3.6.1-1.noarch.rpm state=present update_cache=yes
+
+- name: script to
+  template:
+    src: rabbitmq.sh
+    dest: /opt/rabbitmq/
+    group: root
+    owner: root
+    mode: 0755
+
+- name: execute script
+  command: sh /opt/rabbitmq/rabbitmq.sh
+
+- name: start rabbotmq
+  service: name=rabbitmq-server state=started enabled=yes

@@ -1,0 +1,14 @@
+#Putting nessus in opt dir jsut for things to be easily tracked
+- file:
+   path: /opt/nessus
+   state: directory
+   mode: 0755
+
+#Nessus is pointing to a bucket on my amazon account which would not be there for too long due to
+- name: Install nessus
+  yum:
+    name: 'https://s3-us-west-2.amazonaws.com/captainovie/Nessus-6.9.3-es7.x86_64.rpm'
+    state: present
+
+- name: Start nessus
+  service: name=nessusd.service state=started

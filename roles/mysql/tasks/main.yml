@@ -1,0 +1,10 @@
+
+- name: config for easy access as root user
+  template:
+     src: my-cnf.j2
+     dest: /root/.my.cnf
+
+- name: set the mysql root password
+  mysql_user: user=root
+              password={{ mysql_root_password }}
+              host=localhost

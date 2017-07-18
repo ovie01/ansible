@@ -1,0 +1,55 @@
+#Logfile path is tail /var/log/mongodb/mongod.log
+- name: Setting up mongodb repo in yum.repos.d
+  template:
+    src: "mongodb-org-{{ mongo_version }}.repo"
+    dest: "/etc/yum.repos.d/mongodb-org-{{ mongo_version }}.repo"
+    group: root
+    owner: root
+    mode: 0755
+
+- name: install mongodb-org
+  yum: name=mongodb-org state=present update_cache=yes
+
+- name: "create config data folder"
+  file:
+    path: "/tmp/{{ item.value.dbpath }}"
+    state: directory
+    mode: 0755
+  with_dict:
+    "{{ mongo_config }}"
+
+- name: "create shard data folder"
+  file:
+    path: "/tmp/{{ item.value.dbpath }}"
+    state: directory
+    mode: 0755
+  with_dict:
+    "{{ mongo_shard }}"
+
+- name: "create app data folder"
+  file:
+    path: "/tmp/{{ item.value.dbpath }}"
+    state: directory
+    mode: 0755
+  with_dict:
+    "{{ mongo_app }}"
+
+- name: "kill any mongod instances"
+  shell: "killall mongod"
+  ignore_errors: yes
+
+- name: "kill any mongos instances"
+  shell: "killall mongos"
+  ignore_errors: yes
+
+- name: "config server"
+  shell: "mongod --fork --configsvr --replSet {{ mongo_replica_set_name }} --dbpath {{ item.value.dbpath }} --bind_ip {{ item.value.bind_ip }} --port {{ item.value.port }} --logpath {{ item.value.logpath }}"
+  with_dict: "{{ mongo_config }}"
+
+- name: "shard server"
+  shell: "mongod --fork --shardsvr --replSet {{ mongo_replica_set_name }} --dbpath {{ item.value.dbpath }} --bind_ip {{ item.value.bind_ip }} --port {{ item.value.port }} --logpath {{ item.value.logpath }}"
+  with_dict: "{{ mongo_shard }}"
+
+- name: "app server"
+  shell: "mongos --fork --configdb {{ mongo_replica_set_name }}/localhost:{{ config_port_1 }},localhost:{{ config_port_2 }},localhost:{{ config_port_3 }} --dbpath {{ item.value.dbpath }} --bind_ip {{ item.value.bind_ip }} --port {{ item.value.port }} --logpath {{ item.value.logpath }}"
+  with_dict: "{{ mongo_app }}"

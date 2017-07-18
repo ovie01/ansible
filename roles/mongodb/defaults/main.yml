@@ -1,0 +1,60 @@
+---
+
+config_port_1: 37017
+config_port_2: 37018
+config_port_3: 37019
+
+mongo_config:
+  config_1:
+    port: "{{config_port_1}}"
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/config_1"
+    logpath: "/tmp/config_1.log"
+  config_2:
+    port: "{{config_port_2}}"
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/config_2"
+    logpath: "/tmp/config_2.log"
+  config_3:
+    port: "{{config_port_3}}"
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/config_3"
+    logpath: "/tmp/config_3.log"
+mongo_shard:
+  shard_1:
+    port: 37020
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/shard_1"
+    logpath: "/tmp/shard_1.log"
+  shard_2:
+    port: 37021
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/shard_2"
+    logpath: "/tmp/shard_2.log"
+  shard_3:
+    port: 37022
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/shard_3"
+    logpath: "/tmp/shard_3.log"
+
+mongo_app:
+  app_1:
+    port: 37023
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/app_1"
+    logpath: "/tmp/app_1.log"
+  app_2:
+    port: 37024
+    bind_ip: "0.0.0.0"
+    dbpath: "/tmp/app_2"
+    logpath: "/tmp/app_2.log"
+  app_3:
+    port: 37025
+    dbpath: "/tmp/app_3"
+    bind_ip: "0.0.0.0"
+    logpath: "/tmp/app_3.log"
+  app_4:
+    port: 37026
+    dbpath: "/tmp/app_4"
+    bind_ip: "0.0.0.0"
+    logpath: "/tmp/app_1.app_4"
