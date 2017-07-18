@@ -1,0 +1,4 @@
+- hosts: diablo
+  roles:
+    - stack
+    # - base
