@@ -1,0 +1,13 @@
+- name: Add Casandra Repo
+  template:
+    src: datastax.repo
+    dest: /etc/yum.repos.d/datastax.repo
+
+- name: java and dsc20
+  yum: name="{{item}}" state=latest update_cache=yes
+  with_items:
+  - java
+  - dsc20
+
+- name: start Cassandra
+  service: name=cassandra state=started

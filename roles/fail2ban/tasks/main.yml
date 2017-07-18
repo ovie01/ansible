@@ -1,0 +1,19 @@
+# creates a directory if it doesn't exist
+- name: install fail2ban
+  yum: name=fail2ban state=present update_cache=yes
+
+# create directory if it does not exist
+- file:
+    path: /opt/fail2ban
+    state: directory
+    mode: 0755
+
+#Copy jail.local to /opt/fail2ban
+- template:
+   src: jail.local
+   dest: /opt/fail2ban
+   owner: root
+   group: root
+
+- name:  start fail2ban
+  service: name=fail2ban state=started

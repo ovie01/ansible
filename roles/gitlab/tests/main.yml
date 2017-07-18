@@ -1,0 +1,16 @@
+#create a directory so things are properly arranged
+- file:
+    dest: /opt/gitlab
+    state: directory
+    mode: 0755
+
+- name: script to install and stat gitlab
+  template:
+    src: gitlab_start.sh
+    dest: /opt/gitlab/
+    group: root
+    owner: root
+    mode: 0755
+
+- name: execute script
+  command: sh /opt/gitlab/gitlab_start.sh

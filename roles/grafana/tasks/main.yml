@@ -1,0 +1,25 @@
+#Create a path for grafana
+- name: Create dir path for app
+  file:
+    path: /opt/grafana
+    state: directory
+    mode: 0755
+
+- name: Add Grafana Repo
+  template:
+     src: grafana.repo
+     dest: /etc/yum.repos.d/
+     group: root
+     owner: root
+     mode: 0755
+
+- name: Install grafana
+  yum: name=grafana state=present update_cache=yes
+
+- name: reload grafana-server
+  shell: systemctl daemon-reload
+
+- name: start grafana
+  service:
+    name: grafana-server
+    state: started

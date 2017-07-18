@@ -1,0 +1,71 @@
+- name: httpd container
+  docker:
+    name: httpd
+    image: httpd
+    state: started
+    expose:
+    - 80
+
+- name: mattermost container
+  docker:
+    name: mattermmost
+    image: mattermost/mattermost-preview
+    state: started
+    expose:
+    - 8065
+
+- name: jira container
+  docker:
+    name: jira
+    image: blacklabelops/jira:7.2.3
+    state: started
+    ports: "8081:8080"
+
+- name: confluence container
+  docker:
+    name: confluence
+    image: atlassian/confluence-server:6.0
+    state: started
+    ports: "8082:8080"
+
+- name: jenkins container
+  docker:
+    name: jenkins
+    image: jenkins
+    state: started
+    ports: "8084:8080"
+
+- name: gitlab container
+  docker:
+    name: gitlab
+    image: gitlab/gitlab-ce:8.13.3-ce.0
+    state: started
+    ports: "8085:80"
+
+- name: cassandra container
+  docker:
+    name: cassandra
+    image: cassandra
+    state: started
+    ports:
+      - "7000:7000"
+      - "7001:7001"
+      - "7199:7199"
+      - "9042:9042"
+      - "9160:9160"
+
+- name: elasticsearch container
+  docker:
+    name: elasticsearch
+    image: elasticsearch
+    state: started
+    ports:
+      - "9200:9300"
+      - "7001:7001"
+
+- name: mongo container
+  docker:
+    name: mongo
+    image: mongo
+    state: started
+    ports: "27017:27017"

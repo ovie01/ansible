@@ -1,0 +1,72 @@
+#  name: yum update
+
+- name: adding authorized_key to target server
+  authorized_key:
+    user: root
+    key: "{{ lookup('file', '/Users/captainovie/.ssh/id_rsa.pub') }}"
+    state: present
+  become: yes
+  when: ansible_os_family == "Centos"
+
+#- lineinfile:
+#    dest: /etc/hosts
+#    regexp: '^127\.0\.0\.1'
+#    line: '1.0.0.1 localhost'
+#    owner: root
+#    group: root
+
+- name: Install docker repo
+  yum_repository:
+    name: Docker Repository
+    baseurl: https://yum.dockerproject.org/repo/main/centos/7/
+    description: EPEL YUM repo
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: https://yum.dockerproject.org/gpg
+  when: ansible_os_family == "RedHat"
+
+- name: install the fedoraproject EPEL repo
+  yum:
+    name: 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm'
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: install pip
+  yum: name=python-pip state=latest
+  when: ansible_os_family == "RedHat"
+
+- name: Install docker-py
+  pip:
+    name=docker-py
+    state=present
+    version=1.8.1
+  when: ansible_os_family == "RedHat"
+
+- name: "install packages"
+  yum: name="{{item}}" state=latest update_cache=yes
+  with_items:
+  - curl
+  - which
+  - wget
+  - nmap
+  - net-tools
+  - nfs-utils
+  - nfs4-acl-tools
+  - bind-utils
+  - powertop
+  - screen
+  - telnet
+  - traceroute
+  - iptraf
+  - telnet
+  - tar
+  - unzip
+  - nmap-ncat
+  - cowsay
+  - net-snmp
+  - net-snmp-utils
+#  - ntop
+  - net-tools
+  - traceroute
+  - iperf
+  when: ansible_os_family == "RedHat"

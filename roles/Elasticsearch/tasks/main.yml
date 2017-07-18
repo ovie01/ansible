@@ -1,0 +1,24 @@
+- name: Create elasticsearch path
+  file:
+    path: /opt/elasticsearch
+    state: directory
+    mode: 0755
+
+- name: Install java-1.8.0-openjdk
+  yum: name=java-1.8.0-openjdk state=present update_cache=yes
+
+- name: install the fedoraproject EPEL repo
+  yum:
+    name: 'https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.3.noarch.rpm'
+    state: present
+
+- name: Replace elasticsearch.yml file
+  template:
+    src: elasticsearch.yml
+    dest: /opt/elasticsearch/elasticsearch.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: start elasticsearch
+  service: name=elasticsearch state=started enabled=yes

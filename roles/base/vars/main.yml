@@ -1,0 +1,5 @@
+---
+# vars file for httpd
+ssh_users:
+  - name: root
+    key: "{{ lookup('file', 'id_rsa.pub') }}"

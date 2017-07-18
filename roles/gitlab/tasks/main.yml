@@ -1,0 +1,29 @@
+#create a directory so things are properly arranged
+- file:
+    dest: /opt/gitlab
+    state: directory
+    mode: 0755
+
+- name: install oppenssh curl postfix
+  yum: name="{{item}}" state=present update_cache=yes
+  with_items:
+  - openssh
+  - curl
+  - postfix
+
+- name: start sshd
+  service: name=sshd state=started enabled=yes
+
+- name: start postfix
+  service: name=postfix state=started enabled=yes
+
+- name: curl gitlab
+  shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+
+- name: install gitlab-ce
+  yum: name="{{item}}" state=present update_cache=yes
+  with_items:
+  - gitlab-ce
+
+- name: Run gitlab
+  shell: gitlab-ctl reconfigure

@@ -1,0 +1,15 @@
+#Create a path for jira
+- name: Create dir path for app
+  file:
+    path: /opt/couchbase
+    state: directory
+    mode: 0755
+
+- name: Install couchbase repo
+  yum:
+    name: 'http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-1-x86_64.rpm'
+    state: present
+
+- name: install couchbase-server
+  yum: name=couchbase-server state=present update_cache=yes
+  
