@@ -1,0 +1,49 @@
+- file:
+    dest: /opt/rabbitmq
+    state: directory
+    mode: 0755
+
+- name: install the fedoraproject EPEL repo
+  yum:
+    name: 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm'
+    state: present
+
+- name: Install erlang
+  yum: name=erlang state=present update_cache=yes
+
+- name: install rabbitmq repo
+  yum:
+    name: 'https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server-3.6.1-1.noarch.rpm'
+    state: present
+
+- rpm_key:
+    state: present
+    key: https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+
+- name: start rabbitmq
+  service: name=rabbitmq-server state=started enabled=yes
+
+- name: add rabbitmq plugins
+  rabbitmq_plugin:
+    names: rabbitmq_management
+    state: enabled
+
+- file:
+    dest: /var/lib/rabbitmq/
+    state: directory
+    mode: 0755
+
+- name: Adding rabbitmq user
+  rabbitmq_user:
+    user: mqadmin
+    password: mqadmin
+    permissions:
+      - vhost: /
+        tags: yes
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+    state: present
+
+- name: set user tags
+  shell: rabbitmqctl set_user_tags mqadmin administrator

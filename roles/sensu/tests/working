@@ -1,0 +1,64 @@
+
+- file:
+    dest: /opt/sensu
+    state: directory
+    mode: 0755
+
+- name: add sensu repo
+  template:
+   src: sensu.repo
+   dest: /etc/yum.repos.d/
+   group: root
+   owner: root
+   mode: 0755
+
+- name: Adding rabbitmq user
+  rabbitmq_user:
+    user: sensu
+    password: sensu
+    permissions:
+      - vhost: /
+        tags: yes
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+    state: present
+
+- name: set user tags
+  shell: rabbitmqctl set_user_tags mqadmin administrator
+
+- name: "install redis sensu"
+  yum: name="{{item}}" state=present update_cache=yes
+  with_items:
+  - redis
+  - sensu
+  - uchiwa
+
+- name: start redis
+  service: name=redis state=started enabled=yes
+
+
+
+- name: Start sensu-api
+  service: name=sensu-api state=started enabled=yes
+
+- name: Start sensu-client
+  service: name=sensu-client state=started enabled=yes
+  ignore_errors: true
+
+- name: Start uchiwa
+  service: name=uchiwa state=started enabled=yes
+
+- name: Start sensu-server
+  service: name=sensu-server state=started enabled=yes
+
+- name: Replace uchiwa.json
+  template:
+    src: uchiwa.json
+    dest: /etc/sensu/uchiwa.json
+    owner: root
+    group: root
+    mode: 0644
+
+- name: restart uchiwa
+  service: name=uchiwa state=restarted enabled=yes

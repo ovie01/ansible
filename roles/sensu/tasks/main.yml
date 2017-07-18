@@ -1,0 +1,27 @@
+
+- file:
+    dest: /opt/sensu
+    state: directory
+    mode: 0755
+
+- name: script to setup sensu
+  template:
+    src: sensu.sh
+    dest: /opt/sensu/
+    group: root
+    owner: root
+    mode: 0755
+
+- name: execute script
+  command: sh /opt/sensu/sensu.sh
+
+- name: Replace uchiwa.json
+  template:
+    src: uchiwa.json
+    dest: /etc/sensu/uchiwa.json
+    owner: root
+    group: root
+    mode: 0644
+
+- name: restart uchiwa
+  service: name=uchiwa state=restarted enabled=yes

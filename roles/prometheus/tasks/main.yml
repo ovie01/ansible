@@ -1,0 +1,28 @@
+# creates a directory if it doesn't exist
+- file:
+    path: /opt/prometheus
+    state: directory
+    mode: 0755
+
+- name: Download prometheus
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v1.4.0/prometheus-1.4.0.linux-amd64.tar.gz
+    dest: /opt/prometheus
+
+# Unarchive a file that is already on the remote machine
+- unarchive: 
+    src: /opt/prometheus/prometheus-1.4.0.linux-amd64.tar.gz
+    dest: /opt/prometheus/
+    remote_src: True
+
+#Created a file to fire prometheus server
+- name: copying over start_prometheus.sh
+  template:
+    src: start_prometheus.sh
+    dest: /opt/prometheus/
+    owner: root
+    group: root
+    mode: 0755
+
+- name: execute script
+  command: sh /opt/prometheus/start_prometheus.sh

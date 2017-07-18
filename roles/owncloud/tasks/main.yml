@@ -1,0 +1,38 @@
+#Create a path for owncloud
+- name: Creat /opt/ownlcoud directory
+  file:
+    dest: /opt/ownlcoud
+    state: directory
+    mode: 0755
+
+- name: install mysql packages
+  yum: name="{{item}}" state=latest update_cache=yes
+  with_items:
+    - httpd
+    - mariadb-server
+    - mariadb
+    - php
+    - php-mysql
+    - php-fpm
+
+- name: start httpd
+  service: name=httpd state=started enabled=yes
+
+- name: ensure mysqld started
+  service: name=mariadb state=started enabled=yes
+
+- name: add key
+  rpm_key:
+    state: present
+    key: https://download.owncloud.org/download/repositories/stable/CentOS_7/repodata/repomd.xml.key
+
+- name: Curl repo
+  command: curl -L https://download.owncloud.org/download/repositories/stable/CentOS_7/ce:stable.repo -o /etc/yum.repos.d/ownCloud.repo
+
+- name: yum-clean-metadata
+  command: yum clean expire-cache
+  args:
+    warn: no
+
+- name: Install owncloud
+  yum: name=owncloud state=present update_cache=yes
