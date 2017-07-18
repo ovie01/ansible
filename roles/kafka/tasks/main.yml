@@ -1,0 +1,12 @@
+
+- name:
+  template:
+    src: kafka.sh
+    dest: /opt/
+    group: root
+    owner: root
+    mode: 0755
+
+
+- name: execute script
+  command: sh /opt/kafka.sh

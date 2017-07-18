@@ -1,0 +1,19 @@
+---
+# Variable setup.
+- name: Install java-1.8.0-openjdk
+  yum: name=java-1.8.0-openjdk state=present update_cache=yes
+
+- name: Download Jenkins.repo
+  get_url:
+      url: http://pkg.jenkins-ci.org/redhat/jenkins.repo
+      dest: /etc/yum.repos.d/
+
+- rpm_key:
+    state: present
+    key: http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+
+- name: install jenkins
+  yum: name=jenkins state=present
+
+- name: start jenkins
+  service: name=jenkins state=started

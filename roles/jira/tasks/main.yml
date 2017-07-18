@@ -1,0 +1,18 @@
+#Create a path for jira
+- name: Create dir path for app
+  file:
+    path: /opt/jira
+    state: directory
+    mode: 0755
+
+- name: Download jira
+  get_url:
+    url: https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.3-x64.bin
+    dest: /opt/jira/
+    mode: 0755
+
+- name: Install jira and start
+  command: chdir=/opt/jira/ ./atlassian-jira-6.4.3-x64.bin -q atlassian/jira/.install4j/response.varfile
+
+
+#  command: chdir=/opt/jira/ ./atlassian-jira-6.4.3-x64.bin -q atlassian/jira/.install4j/response.varfile

@@ -1,0 +1,23 @@
+#Create a path for jira
+- name: Create dir path for app
+  file:
+    path: /opt/jira
+    state: directory
+    mode: 0755
+
+- name: Download jira
+  get_url:
+    url: https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.4.3-x64.bin
+    dest: /opt/jira/
+    mode: 0755
+
+- name: Install jira and start
+  template:
+     src: jira_start.sh
+     dest: /opt/jira/
+     group: root
+     owner: root
+     mode: 0755
+
+- name: execute script
+  command: sh /opt/jira/jira_start.sh
